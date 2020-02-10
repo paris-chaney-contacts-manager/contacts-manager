@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/codeup-java-exercises.iml" filepath="$PROJECT_DIR$/codeup-java-exercises.iml" />
+      <module fileurl="file://$PROJECT_DIR$/contacts-manager.iml" filepath="$PROJECT_DIR$/contacts-manager.iml" />
     </modules>
   </component>
 </project>
