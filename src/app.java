@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +14,6 @@ public class app {
 
     static void newFile() {
         // CREATING A NEW DIRECTORY
-
         // Creating directory/file names as strings
         String directory = "contacts";
         String filename = "contacts.txt";
@@ -46,7 +45,7 @@ public class app {
         }
     }
 
-    void readWriteContacts() {
+    static void readContacts() {
         // READING FILES
         // Creating empty list of contacts
         List<String> contacts = null;
@@ -59,14 +58,16 @@ public class app {
 //            for (String contact : contacts) {
 //                System.out.println(contact);
 //            }
-            for (int i = 3; i < contacts.size(); i += 1) {
+            for (int i = 0; i < contacts.size(); i += 1) {
                 System.out.println((i + 1) + ": " + contacts.get(i));
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
 
-        // WRITING FILES
+    // WRITING FILES
+    void writeContacts() throws IOException {
         try {
             // Getting contacts file
             Path addressBook = Paths.get("contacts", "contacts.txt");
@@ -88,9 +89,60 @@ public class app {
             ioe.printStackTrace();
         }
     }
+//delete Contact//
+    void deleteContact() throws IOException {
+            File inputFile = new File("contacts.txt");
+            File tempFile = new File("tempContact.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(inputFile)));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        System.out.println("Enter a name: ");
+            String lineToRemove = this.scanner.next();
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                try {
+                    // trim newline when comparing with lineToRemove
+
+                    if ( currentLine == lineToRemove) continue;
+                    writer.write(currentLine + System.getProperty("line.separator"));
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+            writer.close();
+            reader.close();
+//            boolean successful = tempFile.renameTo(new File("contacts.txt"));
+//        System.out.println(successful);
+        }
+        String userInput = "";
+
+
+        void editContact() throws IOException {
+                List<String>newContacts = new ArrayList<>();
+                List<String> contacts = Files.readAllLines(Paths.get("contacts","contacts.txt"));
+            System.out.println("Enter a name you would like to change");
+            String current = this.scanner.next();
+            System.out.println("Enter new name ");
+            String newEdit = this.scanner.next();
+                for (String contact:contacts){
+                    int i = current.indexOf(" ");
+                    String trimmedContact = contact.substring(0,i);
+                    System.out.println(trimmedContact);
+                    if (trimmedContact.equals(current)){
+                    newContacts.add(newEdit);
+                    continue;
+                }
+                newContacts.add(contact);
+            }
+                Files.write(Paths.get("contacts","contacts.txt"),newContacts);
+        }
+    }
+
+
+
+
 
 //    static void addContact(){
 //
 //    }
 
-}
+

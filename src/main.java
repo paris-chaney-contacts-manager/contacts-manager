@@ -1,9 +1,14 @@
+import java.io.IOException;
+
 public class main extends app {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         main main = new main();
 
-        newFile();
-        main.readWriteContacts();
+//        newFile();
+        readContacts();
+//        main.deleteContact();
+//        main.writeContacts();
+        main.editContact();
     }
 
 }
