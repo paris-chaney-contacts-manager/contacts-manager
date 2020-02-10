@@ -5,10 +5,12 @@ public class main extends app {
         main main = new main();
 
 //        newFile();
-        readContacts();
+        main.readContacts();
 //        main.deleteContact();
 //        main.writeContacts();
         main.editContact();
+
+
     }
 
 }
