@@ -11,6 +11,7 @@ public class people {
         this.phoneNumber = phoneNumber;
 //        this.email = email;
     }
+    
     //getters//
     public String getName(){
         return this.name;
@@ -18,7 +19,8 @@ public class people {
     public String getPhoneNumber(){
         return this.phoneNumber;
     }
-//    public String getEmail(){
+
+    //    public String getEmail(){
 //        return this.email;
 //    }
 
@@ -32,5 +34,10 @@ public class people {
 //    public void setEmail(String email){
 //        this.email = email;
 //    }
+
+    // Creating string from instance of contact
+    public String contactString(){
+        return this.name + " | " + this.phoneNumber;
+    }
 
 }

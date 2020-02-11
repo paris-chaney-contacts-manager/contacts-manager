@@ -5,160 +5,170 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-    public class app {
-        List<String> contacts;
-        private Scanner scanner;
+public class app {
+
+    // Stores contact objects
+   private static List<people> contactObjects = new ArrayList<>();
+    // Stores contacts objects as list
+   private static List<String> contactsList = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    // Paris- I moved the main here because it was getting difficult to manage the variables above and the methods in a separate file. We can refactor later if we want to make it cleaner!
+    public static void main(String[] args){
+        app app = new app();
+
+        newFile();
+        readContacts();
+        // Creating filler contacts
+        people contact1 = new people("Test","1234567890");
+        people contact2 = new people("Jane","0987654321");
+        // Converting the object to a string using a method from the constructor class
+        contactsList.add(contact1.contactString());
+        System.out.println(contactsList);
+
+//        app.deleteContact();
+        writeContacts();
+//        app.editContact();
 
 
-        people person = new people("Paris", "210-090-0999");
+    }
 
 
-        public app() {
-            this.scanner = new Scanner(System.in);
-        }
+    static void newFile() {
 
-        static void newFile() {
-            // CREATING A NEW DIRECTORY
-            // Creating directory/file names as strings
-            String directory = "contacts";
-            String filename = "contacts.txt";
+        String directory = "contacts";
+        String filename = "contacts.txt";
+        Path dataDirectory = Paths.get(directory);
+        Path dataFile = Paths.get(directory, filename);
 
-            // Setting path for directory
-            Path dataDirectory = Paths.get(directory);
-            // Printing absolute path for directory
-            System.out.println(dataDirectory.toAbsolutePath());
-            // Setting path for file (NOTE: method override in Paths class allows different parameters for files and directory creation)
-            Path dataFile = Paths.get(directory, filename);
-
-            // Error handling for file creation
-            try {
-                // NOTE: If the file already exists, program will run without creating files and WILL NOT run catch block
-                // If the directory does not exist, create a new one
-                if (Files.notExists(dataDirectory)) {
-                    Files.createDirectories(dataDirectory);
-                    System.out.println("Directory created");
-                }
-                // If file does not exist in the specified directory, create a new one
-                if (!Files.exists(dataFile)) {
-                    Files.createFile(dataFile);
-                    System.out.println("File created");
-                }
-                // Handling errors during file creation
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-                System.out.println("Something went wrong");
+        try {
+            if (Files.notExists(dataDirectory)) {
+                Files.createDirectories(dataDirectory);
+                System.out.println("Directory created");
             }
+            if (!Files.exists(dataFile)) {
+                Files.createFile(dataFile);
+                System.out.println("File created");
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.out.println("Something went wrong");
         }
+    }
 
-        void readContacts() {
-            // READING FILES
-            // Creating empty list of contacts
-//        List<String> contacts = null;
-            contacts = new ArrayList<>();
-            try {
-                // Getting addressBook file path (contacts/contacts.txt)
-                Path addressBook = Paths.get("contacts", "contacts.txt");
-                // Getting all lines from contacts.txt (which should be nothing at first)
-                contacts = Files.readAllLines(addressBook);
-                // Print each line of the list to the console
+    // Reformulated to work with the people objects!!
+    static List<String> readContacts() {
+        List<String> contacts = null;
+
+        try {
+            Path addressBook = Paths.get("contacts", "contacts.txt");
+            contacts = Files.readAllLines(addressBook);
+
 //            for (String contact : contacts) {
 //                System.out.println(contact);
 //            }
-                for (int i = 0; i < contacts.size(); i += 1) {
-                    System.out.println((i + 1) + ": " + contacts.get(i));
-                }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
+//                for (int i = 0; i < contacts.size(); i += 1) {
+//                    System.out.println((i + 1) + ": " + contacts.get(i));
+//                }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
+        return contacts;
+    }
 
-        // WRITING FILES from people class using objects//
-        void writeContacts() throws IOException {
-            contacts = null;
-            contacts.add(person);
+    // Writing files; called every time files are re-written OR when user exits
+    static void writeContacts(){
+        try{
+            Path contactsPath = Paths.get("contacts","contacts.txt");
+            Files.write(contactsPath, contactsList);
+        } catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+    }
+
+//    // WRITING FILES from people class using objects//
+//    void writeContacts() throws IOException {
+//        contacts = null;
+//        contacts.add(person);
+//        try {
+//            // Getting contacts file
+//            Path addressBook = Paths.get("contacts", "contacts.txt");
+//            // Getting contact info from scanner
+//
+//            // Writing new added contents to the file
+////            Files.write(addressBook, contacts);
+//            System.out.println("Input contact name");
+//            String name = this.scanner.nextLine();
+//            System.out.println("Input contact number");
+//            String number = this.scanner.next();
+//            Files.write(
+//                    addressBook,
+//                    Arrays.asList(name + " | " + number),
+//                    StandardOpenOption.APPEND
+//            );
+//            System.out.println("Done");
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }
+
+    //delete Contact//
+    void deleteContact() throws IOException {
+        File inputFile = new File("contacts.txt");
+        File tempFile = new File("tempContact.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(inputFile)));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        System.out.println("Enter a name: ");
+        String lineToRemove = this.scanner.next();
+        String currentLine;
+        while ((currentLine = reader.readLine()) != null) {
             try {
-                // Getting contacts file
-                Path addressBook = Paths.get("contacts", "contacts.txt");
-                // Getting contact info from scanner
+                // trim newline when comparing with lineToRemove
 
-                // Writing new added contents to the file
-//            Files.write(addressBook, contacts);
-                System.out.println("Input contact name");
-                String name = this.scanner.nextLine();
-                System.out.println("Input contact number");
-                String number = this.scanner.next();
-                Files.write(
-                        addressBook,
-                        Arrays.asList(name + " | " + number),
-                        StandardOpenOption.APPEND
-                );
-                System.out.println("Done");
+                if (currentLine == lineToRemove) continue;
+                writer.write(currentLine + System.getProperty("line.separator"));
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
         }
-
-        //delete Contact//
-        void deleteContact() throws IOException {
-            File inputFile = new File("contacts.txt");
-            File tempFile = new File("tempContact.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(inputFile)));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-            System.out.println("Enter a name: ");
-            String lineToRemove = this.scanner.next();
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                try {
-                    // trim newline when comparing with lineToRemove
-
-                    if (currentLine == lineToRemove) continue;
-                    writer.write(currentLine + System.getProperty("line.separator"));
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-            }
-            writer.close();
-            reader.close();
+        writer.close();
+        reader.close();
 //            boolean successful = tempFile.renameTo(new File("contacts.txt"));
 //        System.out.println(successful);
-        }
+    }
 
-        String userInput = "";
+    String userInput = "";
 
 
-        void editContact() throws IOException {
-            List<String> newContacts = new ArrayList<>();
-            List<String> contacts = Files.readAllLines(Paths.get("contacts", "contacts.txt"));
-            System.out.println("Enter a name you would like to change");
-            String current = this.scanner.next();
-            System.out.println("Enter new name ");
-            String newEdit = this.scanner.next();
-            for (String contact : contacts) {
-                int i = current.indexOf(" ");
-                String trimmedContact = contact.substring(0, i);
-                System.out.println(trimmedContact);
-                if (trimmedContact.equals(current)) {
-                    newContacts.add(newEdit);
-                    continue;
-                }
-                newContacts.add(contact);
+    void editContact() throws IOException {
+        List<String> newContacts = new ArrayList<>();
+        List<String> contacts = Files.readAllLines(Paths.get("contacts", "contacts.txt"));
+        System.out.println("Enter a name you would like to change");
+        String current = this.scanner.next();
+        System.out.println("Enter new name ");
+        String newEdit = this.scanner.next();
+        for (String contact : contacts) {
+            int i = current.indexOf(" ");
+            String trimmedContact = contact.substring(0, i);
+            System.out.println(trimmedContact);
+            if (trimmedContact.equals(current)) {
+                newContacts.add(newEdit);
+                continue;
             }
-            Files.write(Paths.get("contacts", "contacts.txt"), newContacts);
+            newContacts.add(contact);
         }
-
+        Files.write(Paths.get("contacts", "contacts.txt"), newContacts);
+    }
 
 
 //    contacts.add(person);
-    }
+}
 
 
 //    static void addContact(){
 //
 //    }
 
-
-
-}
 
 
 
