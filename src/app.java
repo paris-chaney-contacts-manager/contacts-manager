@@ -27,7 +27,7 @@ public class app {
         // Populates objects, prints contacts to console
         readContacts();
 
-        int choice = 6;
+        int choice = 0;
         do {
             System.out.println();
             System.out.println("What would you like to do?");
@@ -36,8 +36,8 @@ public class app {
             System.out.println("\t2 - Add new contacts");
             System.out.println("\t3 - Search a contact by name");
             System.out.println("\t4 - Delete a contact by name");
-            System.out.println("\t5 - Edit a contact by name or number");
-            System.out.println("\t6 - Exit");
+            System.out.println("\t5 - Exit");
+
 
             try {
                 choice = Integer.parseInt(scanner.nextLine());
@@ -58,20 +58,13 @@ public class app {
                 case 4:
                     deleteContact();
                     break;
-//                case 5:
                 default:
                     break;
             }
 
-        } while (choice != 6);
+        } while (choice < 5);
+
         System.out.println("Goodbye");
-
-
-//        app.deleteContact();
-//        app.writeContacts();
-//        app.editContact();
-
-
     }
 
 
@@ -90,8 +83,6 @@ public class app {
                 Arrays.asList(newContact.contactString()),
                 StandardOpenOption.APPEND
         );
-        System.out.println("Contact objects: " + contactObjects);
-        System.out.println("Contact list: " + contactsList);
     }//done//
 
 
