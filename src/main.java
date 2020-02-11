@@ -11,11 +11,10 @@ public class main extends app {
 //        people contact1 = new people("Jane","0987654321");
 
 //        main.deleteContact();
-<<<<<<< HEAD
-        main.writeContacts();
-=======
+
 //        main.writeContacts();
->>>>>>> fc8a62e4e743394f30a7a77ce1c8049f779dca0a
+//        main.writeContacts();
+
 //        main.editContact();
 
 
