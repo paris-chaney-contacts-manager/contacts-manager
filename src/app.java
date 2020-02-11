@@ -9,8 +9,8 @@ import java.util.*;
         List<String> contacts;
         private Scanner scanner;
 
-
         people person = new people("Paris", "210-090-0999");
+
 
 
         public app() {
@@ -74,8 +74,10 @@ import java.util.*;
 
         // WRITING FILES from people class using objects//
         void writeContacts() throws IOException {
-            contacts = null;
-            contacts.add(person);
+
+            contacts = new ArrayList<>();
+            contacts.add(person.toString());
+
             try {
                 // Getting contacts file
                 Path addressBook = Paths.get("contacts", "contacts.txt");
@@ -134,7 +136,7 @@ import java.util.*;
             System.out.println("Enter new name ");
             String newEdit = this.scanner.next();
             for (String contact : contacts) {
-                int i = current.indexOf(" ");
+                int i = current.indexOf("");
                 String trimmedContact = contact.substring(0, i);
                 System.out.println(trimmedContact);
                 if (trimmedContact.equals(current)) {
@@ -158,7 +160,7 @@ import java.util.*;
 
 
 
-}
+
 
 
 

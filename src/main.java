@@ -7,8 +7,8 @@ public class main extends app {
 //        newFile();
         main.readContacts();
 //        main.deleteContact();
-//        main.writeContacts();
-        main.editContact();
+        main.writeContacts();
+//        main.editContact();
 
 
     }
