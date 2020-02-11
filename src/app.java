@@ -32,7 +32,7 @@ public class app {
         contactsList = txtToString();
 
 //        stringToObject();
-
+        readContacts();
         int choice = 6;
         do {
             System.out.println();
@@ -67,14 +67,11 @@ public class app {
 //                    break;
 //                case 5:
                 default:
-                   break;
+                    break;
             }
 
         } while (choice != 6);
         System.out.println("Goodbye");
-
-
-
 
 
 //        app.deleteContact();
@@ -172,7 +169,7 @@ public class app {
 //    }
 
 
-        // Writing files; called every time files are re-written OR when user exits
+    // Writing files; called every time files are re-written OR when user exits
     static void writeContacts() {
         try {
             Path contactsPath = Paths.get("contacts", "contacts.txt");
@@ -195,16 +192,18 @@ public class app {
 //}
 
     static void searchContacts() throws IOException {
-        System.out.println("Enter the name you would like to search: ");
-        String name = scanner.nextLine();
+        System.out.println("Enter search query (name or number): ");
+        String userInput = scanner.nextLine();
 
         Path addressBook = Paths.get("contacts", "contacts.txt");
-        contactsList = Files.readAllLines(addressBook);
+//        contactsList = Files.readAllLines(addressBook);
 //        System.out.println(contactObjects);//watch this//
         for (people contact : contactObjects) {
-            System.out.println(contact.toString());
-            System.out.println("pending");
-            if (contact.getName().equals(name)) {
+//            System.out.println(contact.getName());
+            if (contact.getName().equalsIgnoreCase(userInput)) {
+                System.out.println(contact.contactString());
+            }
+            if (contact.getPhoneNumber().equals(userInput)) {
                 System.out.println(contact.contactString());
             }
         }
