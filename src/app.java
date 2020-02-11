@@ -20,19 +20,13 @@ public class app {
         app app = new app();
 
         newFile();
-        // Creating filler contacts
-        people contact1 = new people("Test", "1234567890");
-        people contact2 = new people("Jane", "0987654321");
-        // Converting the object to a string using a method from the constructor class
-//        contactsList.add(contact1.contactString());
-        contactObjects.add(contact1);
-        System.out.println("Contact objects: " + contactObjects);
 
         // Sets empty list equal to lines of strings in txt file at app start
         contactsList = txtToString();
 
-//        stringToObject();
+        // Populates objects, prints contacts to console
         readContacts();
+
         int choice = 6;
         do {
             System.out.println();
@@ -48,7 +42,6 @@ public class app {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException nfe) {
-//                continue;
                 break;
             }
 
@@ -62,9 +55,9 @@ public class app {
                 case 3:
                     searchContacts();
                     break;
-//                case 4:
-////                    deleteContact();
-//                    break;
+                case 4:
+                    deleteContact();
+                    break;
 //                case 5:
                 default:
                     break;
@@ -133,13 +126,13 @@ public class app {
             contacts = Files.readAllLines(addressBook);
             for (String contact : contacts) {
                 String[] contactArray = contact.split(" | ");
-                System.out.println(Arrays.toString(contactArray));
+//                System.out.println(Arrays.toString(contactArray));
                 people contactObj = new people(contactArray[0], contactArray[2]);
                 contactObjects.add(contactObj);
+                System.out.println(contact);
             }
-            System.out.println(".txt file:" + contacts);
-            System.out.println("Contact objects: " + contactObjects);
-            System.out.println("Contact list: " + contactsList);
+//            System.out.println("Contact objects: " + contactObjects);
+//            System.out.println("Contact list: " + contactsList);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -158,48 +151,20 @@ public class app {
         return contacts;
     }
 
-//    static void stringToObject(){
-//        List<String> tempStringList = txtToString();
-//        String listStrings = String.join(",", tempStringList);
-//        System.out.println("List of strings: " + listStrings);
-//        String[] listArray = listStrings.split(",");
-//        System.out.println("List array: " + Arrays.toString(listArray));
-////        String[] joinedArray = ;
-//        //split and join//
-//    }
+//    // Writing files; called every time files are re-written OR when user exits
+//    static void writeContacts() {
+//        try {
+//            Path contactsPath = Paths.get("contacts", "contacts.txt");
+//            Files.write(contactsPath, contactsList);
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }//done//
 
-
-    // Writing files; called every time files are re-written OR when user exits
-    static void writeContacts() {
-        try {
-            Path contactsPath = Paths.get("contacts", "contacts.txt");
-            Files.write(contactsPath, contactsList);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }//done//
-
-//    static void searchContacts() throws IOException {
-//        System.out.println("Enter the name you would like to search: ");
-//        String name = scanner.next();
-//        Paths.get("contacts", "contacts.txt");
-//
-//            for (people contact: contactObjects) {
-//                if (name == contact.getName() )
-//                System.out.println(contact.contactString());
-//            }
-//        writeContacts();
-//}
-
-    static void searchContacts() throws IOException {
+    static void searchContacts() {
         System.out.println("Enter search query (name or number): ");
         String userInput = scanner.nextLine();
-
-        Path addressBook = Paths.get("contacts", "contacts.txt");
-//        contactsList = Files.readAllLines(addressBook);
-//        System.out.println(contactObjects);//watch this//
         for (people contact : contactObjects) {
-//            System.out.println(contact.getName());
             if (contact.getName().equalsIgnoreCase(userInput)) {
                 System.out.println(contact.contactString());
             }
@@ -208,57 +173,62 @@ public class app {
             }
         }
     }
-//    // WRITING FILES from people class using objects//
-//    void writeContacts() throws IOException {
-//        contacts = null;
-//        contacts.add(person);
-//        try {
-//            // Getting contacts file
-//            Path addressBook = Paths.get("contacts", "contacts.txt");
-//            // Getting contact info from scanner
-//
-//            // Writing new added contents to the file
-////            Files.write(addressBook, contacts);
-//            System.out.println("Input contact name");
-//            String name = this.scanner.nextLine();
-//            System.out.println("Input contact number");
-//            String number = this.scanner.next();
-//            Files.write(
-//                    addressBook,
-//                    Arrays.asList(name + " | " + number),
-//                    StandardOpenOption.APPEND
-//            );
-//            System.out.println("Done");
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//    }
 
-    //delete Contact//
-    void deleteContact() throws IOException {
-        File inputFile = new File("contacts.txt");
-        File tempFile = new File("tempContact.txt");
-        BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(inputFile)));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-        System.out.println("Enter a name: ");
-        String lineToRemove = this.scanner.next();
-        String currentLine;
-        while ((currentLine = reader.readLine()) != null) {
 
-            try {
-                // trim newline when comparing with lineToRemove
-
-                if (currentLine == lineToRemove) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
+    public static void deleteContact() {
+//        System.out.println("4. Delete contacts by name and/or phone number.");
+        System.out.print("Enter a Name or Number: ");
+        Scanner myScanner = new Scanner(System.in);
+        String searchedName = myScanner.nextLine();
+        Path ContactsPath = Paths.get("contacts", "contacts.txt");
+        List<String> contactList;
+        try {
+            contactList = Files.readAllLines(ContactsPath);
+            List<String> newList = new ArrayList<>();
+            for (String contact : contactList) {
+                contact = contact.toLowerCase();
+                if (contact.toLowerCase().contains(searchedName)) {
+                    continue;
+                }
+                newList.add(contact);
             }
+            for (String name : newList) {
+                System.out.println(name);
+            }
+            Files.write(Paths.get("contacts", "contacts.txt"), newList);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        writer.close();
-        reader.close();
-//            boolean successful = tempFile.renameTo(new File("contacts.txt"));
-//        System.out.println(successful);
     }
+
+
+
+
+//    //delete Contact//
+//    void deleteContact() throws IOException {
+//        File inputFile = new File("contacts.txt");
+//        File tempFile = new File("tempContact.txt");
+//        BufferedReader reader = new BufferedReader(new FileReader(String.valueOf(inputFile)));
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+//        System.out.println("Enter a name: ");
+//        String lineToRemove = this.scanner.next();
+//        String currentLine;
+//        while ((currentLine = reader.readLine()) != null) {
+//
+//            try {
+//                // trim newline when comparing with lineToRemove
+//
+//                if (currentLine == lineToRemove) continue;
+//                writer.write(currentLine + System.getProperty("line.separator"));
+//            } catch (IOException ioe) {
+//                ioe.printStackTrace();
+//            }
+//        }
+//        writer.close();
+//        reader.close();
+////            boolean successful = tempFile.renameTo(new File("contacts.txt"));
+////        System.out.println(successful);
+//    }
 
 
     String userInput = "";
